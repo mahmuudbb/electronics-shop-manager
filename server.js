@@ -1,6 +1,6 @@
 require("dotenv").config();
 const express=require("express"),session=require("express-session"),bcrypt=require("bcryptjs"),mysql=require("mysql2/promise"),path=require("path"),XLSX=require("xlsx");
-const app=express();app.set("trust proxy",1);app.use(express.json());app.use(express.urlencoded({extended:false}));app.use(express.static(path.join(__dirname,"public")));
+const app=express();app.set("trust proxy",1);app.use(express.json({limit:"5mb"}));app.use(express.urlencoded({extended:false}));app.use(express.static(path.join(__dirname,"public")));
 const pool=mysql.createPool(process.env.MYSQL_URL?{uri:process.env.MYSQL_URL,waitForConnections:true,connectionLimit:10,decimalNumbers:true}:{host:process.env.MYSQLHOST||process.env.DB_HOST,port:Number(process.env.MYSQLPORT||process.env.DB_PORT||3306),user:process.env.MYSQLUSER||process.env.DB_USER,password:process.env.MYSQLPASSWORD||process.env.DB_PASSWORD,database:process.env.MYSQLDATABASE||process.env.DB_NAME,waitForConnections:true,connectionLimit:10,decimalNumbers:true});
 app.use(session({name:"shop.sid",secret:process.env.SESSION_SECRET||"replace-with-a-long-random-secret",resave:false,saveUninitialized:false,cookie:{httpOnly:true,sameSite:"lax",secure:process.env.NODE_ENV==="production",maxAge:43200000}}));
 const schema=[
